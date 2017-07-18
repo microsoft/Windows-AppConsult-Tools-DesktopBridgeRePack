@@ -38,7 +38,7 @@ Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx 
 $AppxManifestContent = Get-Content -path $AppxManifestFile
 # [^"]+ = Any characters except "
 # So we are looking for Publisher="CN=Blabla.²&  blablabla!?; etc..."
-$AppxManifestContent -Replace 'Publisher="CN=[^"]+"', 'Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
+$AppxManifestContent -Replace 'Identity([^>]+)Publisher="(CN=[^"]+)"', 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
 #$AppxManifestContent -Replace "Publisher='CN=[^']+'", 'Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
 
 Write-Host "Done" -ForegroundColor Yellow
