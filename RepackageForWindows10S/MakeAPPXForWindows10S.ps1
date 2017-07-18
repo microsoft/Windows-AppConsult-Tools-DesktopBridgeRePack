@@ -47,7 +47,7 @@ Write-Host "Done" -ForegroundColor Yellow
 
 # 3. Recreate the Appx file with the modified AppxManifest.xml
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Recreating the Appx file" -PercentComplete ($Index / $Steps * 100)
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Repackaging the Appx file" -PercentComplete ($Index / $Steps * 100)
 $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxFilenameWithoutExtension + "StoreSigned.appx"
 & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxFile -d $UnzippedFolder -l
 Write-Host "Done" -ForegroundColor Yellow
@@ -62,9 +62,8 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-Write-Host "Newly and signed Appx file available at: $ModifiedAppxFile" -ForegroundColor Green
-
-
+Write-Host "`nNewly and signed Appx file available at " -nonewline
+Write-Host "$ModifiedAppxFile" -ForegroundColor Green
 
 
 # App packager (MakeAppx.exe) - https://msdn.microsoft.com/en-us/library/windows/desktop/hh446767(v=vs.85).aspx
