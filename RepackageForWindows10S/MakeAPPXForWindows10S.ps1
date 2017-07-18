@@ -10,7 +10,7 @@ Write-Host "[INFO] AppxFile = '$AppxFile'"
 $Index = 0
 $Steps = 4
 
-# 1. Create a new unique folder for extracting the APPX files
+# 1. Creates a new unique folder for extracting the APPX files
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Extracting Appx files" -PercentComplete ($Index / $Steps * 100)
 $AppxPathOnly = Split-Path -Path $AppxFile
@@ -30,7 +30,7 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-# 2. Modify the 'CN' in the extracted AppxManifest.xml
+# 2. Modifies the 'CN' in the extracted AppxManifest.xml
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
 $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
@@ -45,7 +45,7 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-# 3. Recreate the Appx file with the modified AppxManifest.xml
+# 3. Recreates the Appx file with the modified AppxManifest.xml
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Repackaging the Appx file" -PercentComplete ($Index / $Steps * 100)
 $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxFilenameWithoutExtension + "StoreSigned.appx"
