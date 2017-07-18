@@ -65,5 +65,5 @@ Write-Host "Done" -ForegroundColor Yellow
 Write-Host "`nNewly and signed Appx file available at " -nonewline
 Write-Host "$ModifiedAppxFile" -ForegroundColor Green
 
-
 # App packager (MakeAppx.exe) - https://msdn.microsoft.com/en-us/library/windows/desktop/hh446767(v=vs.85).aspx
+# Porting and testing your classic desktop applications on Windows 10 S with the Desktop Bridge - https://blogs.msdn.microsoft.com/appconsult/2017/06/15/porting-and-testing-your-classic-desktop-applications-on-windows-10-s-with-the-desktop-bridge/
