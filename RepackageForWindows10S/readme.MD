@@ -1,5 +1,5 @@
 # Usage
-`MakeAPPXForWindows10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"
+`MakeAPPXForWindows10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"`
 
 # Actions
 1. Creates a new unique folder for extracting the APPX files
