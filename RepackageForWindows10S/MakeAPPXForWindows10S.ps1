@@ -30,11 +30,7 @@ $AppxFilenameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($A
 $UnzippedFolder =  $AppxPathOnly + "\" + $AppxFilenameWithoutExtension + "_" + $CurrentDateTime
 Write-Host "[INFO] Unzipped folder = '$UnzippedFolder'"
 Write-Host "[WORK] Extracting files from '$AppxFile' to '$UnzippedFolder'..."
-
-
 & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxFile /d $UnzippedFolder
-#Add-Type -assembly "system.io.compression.filesystem"
-#[io.compression.zipfile]::ExtractToDirectory($AppxFile, $UnzippedFolder)
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
