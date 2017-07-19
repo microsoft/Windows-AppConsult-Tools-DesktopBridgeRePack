@@ -6,6 +6,12 @@ Param(
 
 Clear-Host
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
+$AppxExists = Test-Path $AppxFile
+if ($AppxExists -eq $false)
+{
+    Write-Host "[Error] '$AppxFile' file was not found" -ForegroundColor Red
+    exit
+}
 Write-Host "[INFO] AppxFile = '$AppxFile'"
 $Index = 0
 $Steps = 4
@@ -36,12 +42,32 @@ Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -stat
 $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
 Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
 $AppxManifestContent = Get-Content -path $AppxManifestFile
-# [^"]+ = Any characters except "
 # So we are looking for Publisher="CN=Blabla.²&  blablabla!?; etc..."
-$AppxManifestContent -Replace 'Identity([^>]+)Publisher="(CN=[^"]+)"', 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
-#$AppxManifestContent -Replace "Publisher='CN=[^']+'", 'Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
-
-Write-Host "Done" -ForegroundColor Yellow
+# or Publisher='CN=Blabla.²&  blablabla!?; etc...'
+$matches = $AppxManifestContent -match 'Identity([^>]+)Publisher="(CN=[^"]+)"'
+if ($matches.Length -ne 0)
+{
+    # [^"]+ = Any characters except "
+    $AppxManifestContent -Replace 'Identity([^>]+)Publisher="(CN=[^"]+)"', 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
+    Write-Host "Done" -ForegroundColor Yellow
+}
+else
+{
+    $regexPublisherToLookFor = "Identity([^>]*)Publisher='(CN=[^']*)'"
+    $matches = ("" + $AppxManifestContent) -match $regexPublisherToLookFor
+    Write-Host $matches.Length
+    if ($matches.Length -ne 0)
+    {
+        # [^"]+ = Any characters except '
+        ("" + $AppxManifestContent) -Replace $regexPublisherToLookFor, 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
+        Write-Host "Done" -ForegroundColor Yellow
+    }
+    else
+    {
+        Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
+        exit
+    }
+}
 # =============================================================================
 
 
