@@ -40,32 +40,36 @@ $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
 $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
 Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
-$AppxManifestContent = Get-Content -path $AppxManifestFile
 # So we are looking for Publisher="CN=Blabla.²&  blablabla!?; etc..."
 # or Publisher='CN=Blabla.²&  blablabla!?; etc...'
-$matches = $AppxManifestContent -match 'Identity([^>]+)Publisher="(CN=[^"]+)"'
-if ($matches.Length -ne 0)
+Add-Type -A 'System.Xml.Linq'
+$doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
+$AppxManifestModified = $false
+foreach($element in $doc.Descendants())
 {
-    # [^"]+ = Any characters except "
-    $AppxManifestContent -Replace 'Identity([^>]+)Publisher="(CN=[^"]+)"', 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
-    Write-Host "Done" -ForegroundColor Yellow
+    if($element.Name.LocalName -eq 'Identity')
+    {
+        foreach($attribute in $element.Attributes())
+        {
+            if($attribute.Name.LocalName -eq "Publisher")
+            {
+                $attribute.value='CN=Appx Test Root Agency Ex'
+                $AppxManifestModified = $true
+                Write-Host "Done" -ForegroundColor Yellow
+                break
+            }
+        }
+    }
+}
+
+if ($AppxManifestModified)
+{
+    $doc.Save($AppxManifestFile);
 }
 else
 {
-    $regexPublisherToLookFor = "Identity([^>]*)Publisher='(CN=[^']*)'"
-    $matches = ("" + $AppxManifestContent) -match $regexPublisherToLookFor
-    Write-Host $matches.Length
-    if ($matches.Length -ne 0)
-    {
-        # [^"]+ = Any characters except '
-        ("" + $AppxManifestContent) -Replace $regexPublisherToLookFor, 'Identity$1Publisher="CN=Appx Test Root Agency Ex"' | Out-File  -Encoding "UTF8" $AppxManifestFile
-        Write-Host "Done" -ForegroundColor Yellow
-    }
-    else
-    {
-        Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
-        exit
-    }
+    Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
+    exit
 }
 # =============================================================================
 
