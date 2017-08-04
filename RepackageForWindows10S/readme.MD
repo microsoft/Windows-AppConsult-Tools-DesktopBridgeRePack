@@ -10,7 +10,7 @@
 3. Recreates the Appx file with the modified AppxManifest.xml
 4. Signs the Appx file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
-> The signed Appx file name will be '<InitialFileName>StoreSigned.appx'
+> The signed Appx file name will be 'InitialFileNameStoreSigned.appx'
   
 # RepackageAPPXFolderForWindows10S
 ## Usage
@@ -22,4 +22,4 @@
 3. Recreates the Appx file with the content of the DesktopBridge folder
 4. Signs the Appx file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
-> The signed Appx file name will be '<FolderName>StoreSigned.appx'
+> The signed Appx file name will be 'FolderNameStoreSigned.appx'
