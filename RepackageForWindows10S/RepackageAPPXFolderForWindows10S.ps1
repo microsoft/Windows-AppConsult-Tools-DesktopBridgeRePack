@@ -19,7 +19,7 @@ $Steps = 2
 # 1. Recreates the Appx file with the modified AppxManifest.xml
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Repackaging the Appx file" -PercentComplete ($Index / $Steps * 100)
-$AppxFile = $AppxFolder + ".appx"
+$AppxFile = $AppxFolder + "StoreSigned.appx"
 & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $AppxFile -d $AppxFolder -l
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
