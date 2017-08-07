@@ -5,7 +5,6 @@ Takes a APPX file, repackages and sign it using the Store test certificate
 `MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"`
 
 `MakeAPPXForWin10S.cmd "MyLocalfolderAPPXFile.appx"`
-<script src="https://gist.github.com/sbovo/d8ba18f79729b468c836f956774337b3.js"></script>
 
 ## Actions
 1. Creates a new unique folder for extracting the APPX files
