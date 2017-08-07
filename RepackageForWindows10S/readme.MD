@@ -1,4 +1,6 @@
- MakeAPPXForWin10S
+# MakeAPPXForWin10S
+Takes a APPX file, repackages and sign it using the Store test certificate
+
 ## Usage
 `MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"`
 
@@ -13,6 +15,7 @@
 > The signed Appx file name will be 'InitialFileNameStoreSigned.appx'
   
 # RepackageAPPXFolderForWin10S
+Takes an APPX folder, repackages and sign it using the Store test certificate
 ## Usage
 `RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeFolder"`
 
