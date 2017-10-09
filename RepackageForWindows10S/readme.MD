@@ -14,7 +14,7 @@ Takes a APPX or BUNDLE file, repackages and sign it using the Store test certifi
 3. Recreates the Appx file with the modified AppxManifest.xml
 4. Signs the Appx/Bundle file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
-> The signed Appx file name will be 'InitialFileNameStoreSigned.appx' 
+> The signed Appx/Bundle file name will be 'InitialFileNameStoreSigned.appx' 
 > or
 > 'InitialFileNameStoreSigned.appxbundle' 
   
