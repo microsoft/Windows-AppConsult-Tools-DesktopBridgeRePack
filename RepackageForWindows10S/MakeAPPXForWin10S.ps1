@@ -1,43 +1,52 @@
 [CmdletBinding()]
 Param(
     [parameter(Mandatory=$true)]
-    [string]$AppxFile
+    [string]$AppxOrBundleFile
 )
 
 Clear-Host
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
-$AppxExists = Test-Path $AppxFile
+$AppxExists = Test-Path $AppxOrBundleFile
 if ($AppxExists -eq $false)
 {
-    Write-Host "[Error] '$AppxFile' file was not found" -ForegroundColor Red
+    Write-Host "[Error] '$AppxOrBundleFile' file was not found" -ForegroundColor Red
     exit
 }
-Write-Host "[INFO] AppxFile = '$AppxFile'"
+Write-Host "[INFO] AppxOrBundle = '$AppxOrBundleFile'"
 $Index = 0
 $Steps = 4
 
-# 1. Creates a new unique folder for extracting the APPX files
+# 1. Creates a new unique folder for extracting the APPX/BUNDLE files
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Extracting Appx files" -PercentComplete ($Index / $Steps * 100)
-$AppxPathOnly = Split-Path -Path $AppxFile
-if ($AppxPathOnly -eq "") # AppxFile is located in the current directory
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Extracting Appx/Bundle files" -PercentComplete ($Index / $Steps * 100)
+$AppxPathOnly = Split-Path -Path $AppxOrBundleFile
+if ($AppxPathOnly -eq "") # AppxOrBundleFile is located in the current directory
 {
     # AppxPathOnly = current path
     $AppxPathOnly=Split-Path $MyInvocation.MyCommand.Path
 }
-$CurrentDateTime = Get-Date -UFormat "%Y-%m-%d-%Hh-%Mm-%Ss"
-$AppxFilenameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($AppxFile)
-$UnzippedFolder =  $AppxPathOnly + "\" + $AppxFilenameWithoutExtension + "_" + $CurrentDateTime
+# Does not use an unique folder name. Reusing the same folder in order to allow manual modifications
+#$CurrentDateTime = Get-Date -UFormat "%Y-%m-%d-%Hh-%Mm-%Ss"
+$AppxOrBundleFilenameWithoutExtension = [System.IO.Path]::GetFileNameWithoutExtension($AppxOrBundleFile)
+$UnzippedFolder =  $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension #+ "_" + $CurrentDateTime
 Write-Host "[INFO] Unzipped folder = '$UnzippedFolder'"
-Write-Host "[WORK] Extracting files from '$AppxFile' to '$UnzippedFolder'..."
-& 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxFile /d $UnzippedFolder
+Write-Host "[WORK] Extracting files from '$AppxOrBundleFile' to '$UnzippedFolder'..."
+$FileExtension = ([System.IO.Path]::GetExtension($AppxOrBundleFile)).ToUpper()
+if($FileExtension -eq '.APPX') {
+    # APPX
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxOrBundleFile /d $UnzippedFolder
+}
+else {
+    #BUNDLE
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unbundle /p $AppxOrBundleFile /d $UnzippedFolder    
+}
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
 # 2. Modifies the 'CN' in the extracted AppxManifest.xml
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
 $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
 Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
 # So we are looking for Publisher="CN=Blabla.�&  blablabla!?; etc..."
@@ -89,16 +98,25 @@ else
 
 # 3. Recreates the Appx file with the modified AppxManifest.xml
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Repackaging the Appx file" -PercentComplete ($Index / $Steps * 100)
-$ModifiedAppxFile = $AppxPathOnly + "\" + $AppxFilenameWithoutExtension + "StoreSigned.appx"
-& 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxFile -d $UnzippedFolder -l
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Repackaging the Appx/Bundle file" -PercentComplete ($Index / $Steps * 100)
+$ModifiedAppxFile = ""
+if($FileExtension -eq '.APPX') {
+    # APPX
+    $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appx"
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxFile -d $UnzippedFolder
+}
+else {
+    #BUNDLE
+    $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxFile -d $UnzippedFolder
+}
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
 # 4. Sign the Appx file with the AppxTestRootAgency providedby the Store team
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Signing the Appx file" -PercentComplete ($Index / $Steps * 100)
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Signing the Appx file" -PercentComplete ($Index / $Steps * 100)
 & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe' sign /a /v /fd SHA256 /f "AppxTestRootAgency.pfx" $ModifiedAppxFile
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
