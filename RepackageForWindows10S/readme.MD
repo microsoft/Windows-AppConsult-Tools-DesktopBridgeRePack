@@ -1,5 +1,5 @@
 # MakeAPPXForWin10S
-Takes a APPX or BUNDLE file, repackages and sign it using the Store test certificate
+Takes an APPX or BUNDLE file, repackages and sign it using the Store test certificate
 
 ## Usage
 `MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"`
