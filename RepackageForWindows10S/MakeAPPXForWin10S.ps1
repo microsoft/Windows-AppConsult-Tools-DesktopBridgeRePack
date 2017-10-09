@@ -40,10 +40,17 @@ $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
 $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
 Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
-# So we are looking for Publisher="CN=Blabla.²&  blablabla!?; etc..."
-# or Publisher='CN=Blabla.²&  blablabla!?; etc...'
+# So we are looking for Publisher="CN=Blabla.ï¿½&  blablabla!?; etc..."
+# or Publisher='CN=Blabla.ï¿½&  blablabla!?; etc...'
 Add-Type -A 'System.Xml.Linq'
-$doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
+try {
+    $doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
+}
+catch {
+    Write-Host "[Error] Not able to open '$AppxManifestFile'" -ForegroundColor Red
+    exit
+}
+
 $AppxManifestModified = $false
 foreach($element in $doc.Descendants())
 {
@@ -64,7 +71,13 @@ foreach($element in $doc.Descendants())
 
 if ($AppxManifestModified)
 {
-    $doc.Save($AppxManifestFile);
+    try {
+         $doc.Save($AppxManifestFile);
+    }
+    catch {
+        Write-Host "[Error] Not able to save back '$AppxManifestFile'" -ForegroundColor Red
+        exit
+    }
 }
 else
 {
