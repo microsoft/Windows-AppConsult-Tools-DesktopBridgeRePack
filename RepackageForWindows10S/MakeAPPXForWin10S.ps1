@@ -9,7 +9,9 @@ There is only one parameter which is the full path to a .APPX or .APPXBUNDLE fil
 
 .EXAMPLE
 MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"
+.EXAMPLE
 MakeAPPXForWin10S.cmd "MyLocalfolderAPPXFile.appx"
+.EXAMPLE
 MakeAPPXForWin10S.cmd "MyLocalfolderAPPXBUNDLEFile.appxbundle"
 
 .NOTES
@@ -21,7 +23,7 @@ https://github.com/sbovo/DesktopBridgeTools/tree/develop/RepackageForWindows10S
 #>
 [CmdletBinding()]
 Param(
-    [parameter(Mandatory=$true)]
+    [parameter(Mandatory=$true, HelpMessage="Full path to the .APPX or .APPXBUNDLE file")]
     [AllowEmptyString()]
     [string]$AppxOrBundleFile
 )
