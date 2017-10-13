@@ -1,8 +1,32 @@
+<#
+
+.SYNOPSIS
+MakeAPPXForWin10S
+
+.DESCRIPTION
+Takes an APPX or BUNDLE file, repackages and signs it using the Store test certificate.
+There is only one parameter which is the full path to a .APPX or .APPXBUNDLE file
+
+.EXAMPLE
+MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"
+MakeAPPXForWin10S.cmd "MyLocalfolderAPPXFile.appx"
+MakeAPPXForWin10S.cmd "MyLocalfolderAPPXBUNDLEFile.appxbundle"
+
+.NOTES
+The signed Appx/Bundle file name will be 'InitialFileNameStoreSigned.appx' or 'InitialFileNameStoreSigned.appxbundle' in the same folder as the original file
+
+.LINK
+https://github.com/sbovo/DesktopBridgeTools/tree/develop/RepackageForWindows10S
+
+#>
 [CmdletBinding()]
 Param(
     [parameter(Mandatory=$true)]
     [string]$AppxOrBundleFile
 )
+
+
+
 
 Clear-Host
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
