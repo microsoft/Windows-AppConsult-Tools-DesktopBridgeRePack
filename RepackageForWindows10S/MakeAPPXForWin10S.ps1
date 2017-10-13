@@ -8,10 +8,15 @@ Takes an APPX or BUNDLE file, repackages and signs it using the Store test certi
 There is only one parameter which is the full path to a .APPX or .APPXBUNDLE file
 
 .EXAMPLE
+Use a full path to an .APPX file:
 MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"
+
 .EXAMPLE
+Use a local path to an .APPX file:
 MakeAPPXForWin10S.cmd "MyLocalfolderAPPXFile.appx"
+
 .EXAMPLE
+Use a full path to an .APPXBUNDLE file:
 MakeAPPXForWin10S.cmd "MyLocalfolderAPPXBUNDLEFile.appxbundle"
 
 .NOTES
