@@ -22,14 +22,20 @@ https://github.com/sbovo/DesktopBridgeTools/tree/develop/RepackageForWindows10S
 [CmdletBinding()]
 Param(
     [parameter(Mandatory=$true)]
+    [AllowEmptyString()]
     [string]$AppxOrBundleFile
 )
 
 
-
-
 Clear-Host
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
+
+if ($AppxOrBundleFile -eq '') {
+    Write-Host "[Error] A .APPX or .APPXBUNDLE file was not specified." -ForegroundColor Red
+    Write-Host "Please use 'get-help .\MakeAPPXForWin10S.ps1' for more details" 
+    exit 
+}
+
 $AppxExists = Test-Path $AppxOrBundleFile
 if ($AppxExists -eq $false)
 {
