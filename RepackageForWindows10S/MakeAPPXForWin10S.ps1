@@ -34,6 +34,55 @@ Param(
 )
 
 
+# Functions
+function ModifyManifestFile ($ManifestFile) {
+    Add-Type -A 'System.Xml.Linq'
+    try {
+        $doc = [System.Xml.Linq.XDocument]::Load($ManifestFile)
+    }
+    catch {
+        Write-Host "[Error] Not able to open '$ManifestFile'" -ForegroundColor Red
+        exit
+    }
+
+    $AppxManifestModified = $false
+    foreach($element in $doc.Descendants())
+    {
+        if($element.Name.LocalName -eq 'Identity')
+        {
+            foreach($attribute in $element.Attributes())
+            {
+                if($attribute.Name.LocalName -eq "Publisher")
+                {
+                    $attribute.value='CN=Appx Test Root Agency Ex'
+                    $AppxManifestModified = $true
+                    Write-Host "Done" -ForegroundColor Yellow
+                    break
+                }
+            }
+        }
+    }
+   
+    if ($AppxManifestModified)
+    {
+        try {
+             $doc.Save($AppxManifestFile);
+        }
+        catch {
+            Write-Host "[Error] Not able to save back '$AppxManifestFile'" -ForegroundColor Red
+            exit
+        }
+    }
+    else
+    {
+        Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
+        exit
+    }
+}
+# =============================================================================
+
+
+# Starting point
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
 
 if ($AppxOrBundleFile -eq '') {
@@ -59,7 +108,7 @@ Write-Host "[INFO] AppxOrBundle = '$AppxOrBundleFile'"
 $Index = 0
 $Steps = 4
 
-# 1. Creates a new unique folder for extracting the APPX/BUNDLE files
+# 1. Creates a new unique folder for extracting the Appx/Bundle files
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Extracting Appx/Bundle files" -PercentComplete ($Index / $Steps * 100)
 $AppxPathOnly = Split-Path -Path $AppxOrBundleFile
@@ -87,86 +136,57 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-# # 2. Modifies the 'CN' in the extracted AppxManifest.xml
-# $Index += 1
-# Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
-# $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
-# Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
-# # So we are looking for Publisher="CN=Blabla.�&  blablabla!?; etc..."
-# # or Publisher='CN=Blabla.�&  blablabla!?; etc...'
-# Add-Type -A 'System.Xml.Linq'
-# try {
-#     $doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
-# }
-# catch {
-#     Write-Host "[Error] Not able to open '$AppxManifestFile'" -ForegroundColor Red
-#     exit
-# }
-
-# $AppxManifestModified = $false
-# foreach($element in $doc.Descendants())
-# {
-#     if($element.Name.LocalName -eq 'Identity')
-#     {
-#         foreach($attribute in $element.Attributes())
-#         {
-#             if($attribute.Name.LocalName -eq "Publisher")
-#             {
-#                 $attribute.value='CN=Appx Test Root Agency Ex'
-#                 $AppxManifestModified = $true
-#                 Write-Host "Done" -ForegroundColor Yellow
-#                 break
-#             }
-#         }
-#     }
-# }
-
-# if ($AppxManifestModified)
-# {
-#     try {
-#          $doc.Save($AppxManifestFile);
-#     }
-#     catch {
-#         Write-Host "[Error] Not able to save back '$AppxManifestFile'" -ForegroundColor Red
-#         exit
-#     }
-# }
-# else
-# {
-#     Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
-#     exit
-# }
-# # =============================================================================
-
-
-# 3. Recreates the Appx file with the modified AppxManifest.xml
+# 2. Modifies the 'CN' in the extracted AppxManifest.xml
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Repackaging the Appx/Bundle file" -PercentComplete ($Index / $Steps * 100)
-$ModifiedAppxFile = ""
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
+
+# So we are looking for Publisher="CN=Blabla.�&  blablabla!?; etc..."
+# or Publisher='CN=Blabla.�&  blablabla!?; etc...'
 if($FileExtension -eq '.APPX') {
     # APPX
-    $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appx"
-    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxFile -d $UnzippedFolder
+    $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
+    Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
+
+    ModifyManifestFile($AppxManifestFile)    
 }
 else {
     #BUNDLE
-    $ModifiedAppxFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
-    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxFile -d $UnzippedFolder
+    $AppxManifestFile = $UnzippedFolder + "\AppxMetadata\AppxBundleManifest.xml"
+    Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
+}
+# =============================================================================
+
+
+# 3. Recreates the Appx/Bundle file with the modified AppxManifest.xml
+$Index += 1
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Repackaging the Appx/Bundle file" -PercentComplete ($Index / $Steps * 100)
+$ModifiedAppxBundleFile = ""
+if($FileExtension -eq '.APPX') {
+    # APPX
+    $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appx"
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder
+}
+else {
+    #BUNDLE
+    $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder
 }
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-# 4. Sign the Appx file with the AppxTestRootAgency providedby the Store team
+# 4. Sign the Appx/Bundle file with the AppxTestRootAgency providedby the Store team
 $Index += 1
 Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Signing the Appx file" -PercentComplete ($Index / $Steps * 100)
-& 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe' sign /a /v /fd SHA256 /f "AppxTestRootAgency.pfx" $ModifiedAppxFile
+& 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe' sign /a /v /fd SHA256 /f "AppxTestRootAgency.pfx" $ModifiedAppxBundleFile
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
 Write-Host "`nNewly and signed Appx/Bundle file available at " -nonewline
-Write-Host "$ModifiedAppxFile" -ForegroundColor Green
+Write-Host "$ModifiedAppxBundleFile" -ForegroundColor Green
 
 # App packager (MakeAppx.exe) - https://msdn.microsoft.com/en-us/library/windows/desktop/hh446767(v=vs.85).aspx
 # Porting and testing your classic desktop applications on Windows 10 S with the Desktop Bridge - https://blogs.msdn.microsoft.com/appconsult/2017/06/15/porting-and-testing-your-classic-desktop-applications-on-windows-10-s-with-the-desktop-bridge/
+
+
