@@ -1,5 +1,5 @@
 # MakeAPPXForWin10S (supports BUNDLE)
-Takes an APPX or BUNDLE file, repackages and signs it using the Store test certificate
+Takes an Appx or Bundle file, repackages and signs it using the Store test certificate
 
 ## Usage
 `MakeAPPXForWin10S.cmd "C:\Temp\MyDesktopBridgeFile.appx"`
@@ -8,12 +8,18 @@ Takes an APPX or BUNDLE file, repackages and signs it using the Store test certi
 
 `MakeAPPXForWin10S.cmd "MyLocalfolderAPPXBUNDLEFile.appxbundle"`
 
-## Actions
-1. Creates a new unique folder for extracting the APPX/BUNDLE files
-2.1 If APPX, modifies the 'CN' in the extracted AppxManifest.xml
-2.2 If BUNDLE, modifies the 'CN' in the extracted AppxMetadata\AppxBundleManifest.xml
+## Actions for APPX
+1. Creates a new unique folder for extracting the Appx files
+2. Modifies the 'CN' in the extracted AppxManifest.xml
 3. Recreates the Appx file with the modified AppxManifest.xml
-4. Signs the Appx/Bundle file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
+4. Signs the Appx file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
+
+## Actions for BUNDLE
+1. Creates a new unique folder for extracting the Bundle files
+2. Modifies the 'CN' in the extracted AppxMetadata\AppxBundleManifest.xml
+3. Takes each internal Appx and do the same work as the one done for an unique Appx (extraction, AppxManifest.xml modification, packaging, signature)
+4. Recreates the Bundle file with the modified AppxMetadata\AppxBundleManifest.xml and modified packages
+5. Signs the Appx/Bundle file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
 > The signed Appx/Bundle file name will be 'InitialFileNameStoreSigned.appx' 
 > or
