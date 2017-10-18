@@ -155,7 +155,10 @@ else {
     ModifyManifestFile($AppxManifestFile)
     
     # All Manifest of all packages have to be modified
-    
+    Get-ChildItem $UnzippedFolder -Filter *.appx | 
+    Foreach-Object {
+        & ((Split-Path $MyInvocation.InvocationName) + "\MakeAPPXForWin10S.cmd") $_.FullName        
+    }
 }
 
 # =============================================================================
