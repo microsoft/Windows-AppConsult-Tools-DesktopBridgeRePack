@@ -101,11 +101,11 @@ function Work($AppxOrBundleFile, $InsideAppx) {
 
     if($FileExtension -eq '.APPX') {
         # APPX
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxOrBundleFile /d $UnzippedFolder
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxOrBundleFile /d $UnzippedFolder /o
     }
     else {
         #BUNDLE
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unbundle /p $AppxOrBundleFile /d $UnzippedFolder    
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unbundle /p $AppxOrBundleFile /d $UnzippedFolder /o
     }
     Write-Host "Done" -ForegroundColor Yellow
     # =============================================================================
@@ -151,12 +151,16 @@ function Work($AppxOrBundleFile, $InsideAppx) {
         else {
             $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appx"
         }
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
     }
     else {
         #BUNDLE
         $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
+    }
+    if ($InsideAppx) {
+        # Deletes the temp Appx fodler
+        Remove-Item $UnzippedFolder -force -Recurse
     }
     Write-Host "Done" -ForegroundColor Yellow
     # =============================================================================
