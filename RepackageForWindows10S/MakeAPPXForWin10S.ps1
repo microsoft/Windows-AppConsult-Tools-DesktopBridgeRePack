@@ -87,56 +87,56 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-# 2. Modifies the 'CN' in the extracted AppxManifest.xml
-$Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
-$AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
-Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
-# So we are looking for Publisher="CN=Blabla.�&  blablabla!?; etc..."
-# or Publisher='CN=Blabla.�&  blablabla!?; etc...'
-Add-Type -A 'System.Xml.Linq'
-try {
-    $doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
-}
-catch {
-    Write-Host "[Error] Not able to open '$AppxManifestFile'" -ForegroundColor Red
-    exit
-}
+# # 2. Modifies the 'CN' in the extracted AppxManifest.xml
+# $Index += 1
+# Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Modifying AppxManifest.xml file" -PercentComplete ($Index / $Steps * 100)
+# $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
+# Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
+# # So we are looking for Publisher="CN=Blabla.�&  blablabla!?; etc..."
+# # or Publisher='CN=Blabla.�&  blablabla!?; etc...'
+# Add-Type -A 'System.Xml.Linq'
+# try {
+#     $doc = [System.Xml.Linq.XDocument]::Load($AppxManifestFile)
+# }
+# catch {
+#     Write-Host "[Error] Not able to open '$AppxManifestFile'" -ForegroundColor Red
+#     exit
+# }
 
-$AppxManifestModified = $false
-foreach($element in $doc.Descendants())
-{
-    if($element.Name.LocalName -eq 'Identity')
-    {
-        foreach($attribute in $element.Attributes())
-        {
-            if($attribute.Name.LocalName -eq "Publisher")
-            {
-                $attribute.value='CN=Appx Test Root Agency Ex'
-                $AppxManifestModified = $true
-                Write-Host "Done" -ForegroundColor Yellow
-                break
-            }
-        }
-    }
-}
+# $AppxManifestModified = $false
+# foreach($element in $doc.Descendants())
+# {
+#     if($element.Name.LocalName -eq 'Identity')
+#     {
+#         foreach($attribute in $element.Attributes())
+#         {
+#             if($attribute.Name.LocalName -eq "Publisher")
+#             {
+#                 $attribute.value='CN=Appx Test Root Agency Ex'
+#                 $AppxManifestModified = $true
+#                 Write-Host "Done" -ForegroundColor Yellow
+#                 break
+#             }
+#         }
+#     }
+# }
 
-if ($AppxManifestModified)
-{
-    try {
-         $doc.Save($AppxManifestFile);
-    }
-    catch {
-        Write-Host "[Error] Not able to save back '$AppxManifestFile'" -ForegroundColor Red
-        exit
-    }
-}
-else
-{
-    Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
-    exit
-}
-# =============================================================================
+# if ($AppxManifestModified)
+# {
+#     try {
+#          $doc.Save($AppxManifestFile);
+#     }
+#     catch {
+#         Write-Host "[Error] Not able to save back '$AppxManifestFile'" -ForegroundColor Red
+#         exit
+#     }
+# }
+# else
+# {
+#     Write-Host "[Error] Not able to find the Publisher attribute for the identity element in '$AppxManifestFile'" -ForegroundColor Red
+#     exit
+# }
+# # =============================================================================
 
 
 # 3. Recreates the Appx file with the modified AppxManifest.xml
@@ -165,7 +165,7 @@ Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
 
-Write-Host "`nNewly and signed Appx file available at " -nonewline
+Write-Host "`nNewly and signed Appx/Bundle file available at " -nonewline
 Write-Host "$ModifiedAppxFile" -ForegroundColor Green
 
 # App packager (MakeAppx.exe) - https://msdn.microsoft.com/en-us/library/windows/desktop/hh446767(v=vs.85).aspx
