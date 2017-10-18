@@ -146,14 +146,18 @@ if($FileExtension -eq '.APPX') {
     # APPX
     $AppxManifestFile = $UnzippedFolder + "\AppxManifest.xml"
     Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
-
     ModifyManifestFile($AppxManifestFile)    
 }
 else {
-    #BUNDLE
+    # BUNDLE
     $AppxManifestFile = $UnzippedFolder + "\AppxMetadata\AppxBundleManifest.xml"
     Write-Host "[WORK] Modifying the '$AppxManifestFile' to use Publisher=""CN=Appx Test Root Agency Ex""..."
+    ModifyManifestFile($AppxManifestFile)
+    
+    # All Manifest of all packages have to be modified
+    
 }
+
 # =============================================================================
 
 
