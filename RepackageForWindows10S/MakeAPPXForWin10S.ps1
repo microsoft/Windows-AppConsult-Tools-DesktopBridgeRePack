@@ -154,7 +154,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
         & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
     }
     else {
-        #BUNDLE
+        # BUNDLE
         $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
         & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
     }
