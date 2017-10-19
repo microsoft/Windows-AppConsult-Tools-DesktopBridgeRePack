@@ -2,7 +2,7 @@
 Param(
     [parameter(Mandatory=$true)]
     [string]$AppxFolder,
-    [parameter(Mandatory=$false, HelpMessage="$true if the folder is a Bundle, $false if it is a simple Appx")]
+    [parameter(Mandatory=$false, HelpMessage="true if the folder is a Bundle, false if it is a simple Appx")]
     [switch]$IsBundle = $false
 )
 
