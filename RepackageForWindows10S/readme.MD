@@ -28,13 +28,19 @@ Takes an Appx or Bundle file, repackages and signs it using the Store test certi
 # RepackageAPPXFolderForWin10S (supports BUNDLE)
 Takes an Appx/Bundle folder, repackages and sign it using the Store test certificate
 ## Usage
+### For Appx
 `RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeFolder"`
 
 `RepackageAPPXFolderForWin10S.cmd "LocalDesktopBridgeFolder"`
 
+### For Bundle
+`RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeBundleFolder" -IsBundle`
+
+`RepackageAPPXFolderForWin10S.cmd "LocalDesktopBridgeBundleFolder" -IsBundle`
+
 ## Actions
 1. Recreates the Appx/Bundle file with the content of the DesktopBridge folder
-2. Signs the Appx file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
+2. Signs the Appx/bundle file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
 > The signed Appx file name will be 'FolderNameStoreSigned.appx'
 > or
