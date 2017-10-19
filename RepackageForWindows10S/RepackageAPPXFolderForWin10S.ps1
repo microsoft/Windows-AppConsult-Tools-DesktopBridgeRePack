@@ -4,7 +4,7 @@ Param(
     [string]$AppxFolder
 )
 
-Clear-Host
+
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
 $AppxFolderExists = Test-Path $AppxFolder
 if ($AppxFolderExists -eq $false)
