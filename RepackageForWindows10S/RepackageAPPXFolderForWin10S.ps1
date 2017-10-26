@@ -1,4 +1,33 @@
-[CmdletBinding()]
+<#
+
+.SYNOPSIS
+RepackageAPPXFolderForWin10S
+
+.DESCRIPTION
+Takes an Appx/Bundle folder, repackages and sign it using the Store test certificate
+There are two parameters
+- The full path to the folder to package
+- (Optional switch) -IsBundle
+
+.EXAMPLE
+Use a full path to an folder containing for APPX packaging:
+`RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeFolder"`
+
+.EXAMPLE
+Use a local path to a folder for APPX packaging:
+`RepackageAPPXFolderForWin10S.cmd "LocalDesktopBridgeFolder"`
+
+.EXAMPLE
+Use a full path to a folder for APPXBUNDLE packaging:
+`RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeBundleFolder" -IsBundle`
+
+.NOTES
+The signed Appx/Bundle file name will be 'FolderNameStoreSigned.appx' or 'FolderNameStoreSigned.appxbundle' in the same folder as the original folder
+
+.LINK
+https://github.com/sbovo/DesktopBridgeTools/tree/develop/RepackageForWindows10S
+
+#>[CmdletBinding()]
 Param(
     [parameter(Mandatory=$true)]
     [string]$AppxFolder,
