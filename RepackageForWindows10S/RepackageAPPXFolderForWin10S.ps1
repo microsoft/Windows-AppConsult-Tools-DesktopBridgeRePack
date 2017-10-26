@@ -25,12 +25,12 @@ Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S
 if ($IsBundle) {
     # BUNDLE
     $AppxFile = $AppxFolder + "StoreSigned.appxbundle"
-    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $AppxFile -d $AppxFolder -o
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $AppxFile -d $AppxFolder -l -o
 }
 else {
     # APPX
     $AppxFile = $AppxFolder + "StoreSigned.appx"
-    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $AppxFile -d $AppxFolder -o
+    & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $AppxFile -d $AppxFolder -l -o
 }
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
