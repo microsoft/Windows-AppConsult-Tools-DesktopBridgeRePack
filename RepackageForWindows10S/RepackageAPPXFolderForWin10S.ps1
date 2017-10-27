@@ -50,17 +50,19 @@ $Steps = 2
 
 # 1. Recreates the Appx file with the modified AppxManifest.xml
 $Index += 1
-Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Repackaging the Appx file" -PercentComplete ($Index / $Steps * 100)
+Write-Progress -Activity "[$($Index)/$($Steps)] Make Appx/Bundle for Windows 10S" -status "Repackaging the Appx/Bundle file" -PercentComplete ($Index / $Steps * 100)
+$AppxFile = ([System.IO.DirectoryInfo]$AppxFolder).Parent.FullName + "\" +  [System.IO.Path]::GetFileNameWithoutExtension($AppxFolder)
 if ($IsBundle) {
     # BUNDLE
-    $AppxFile = $AppxFolder + "StoreSigned.appxbundle"
+    $AppxFile = $AppxFile + "StoreSigned.appxbundle"
     & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $AppxFile -d $AppxFolder -l -o
 }
 else {
     # APPX
-    $AppxFile = $AppxFolder + "StoreSigned.appx"
+    $AppxFile = $AppxFile + "StoreSigned.appx"
     & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $AppxFile -d $AppxFolder -l -o
 }
+
 Write-Host "Done" -ForegroundColor Yellow
 # =============================================================================
 
