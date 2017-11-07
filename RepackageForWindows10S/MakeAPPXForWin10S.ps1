@@ -156,7 +156,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
     else {
         # BUNDLE
         $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appxbundle"
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder -l -o
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' bundle -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
     }
     if ($InsideAppx) {
         # Deletes the temp Appx fodler
