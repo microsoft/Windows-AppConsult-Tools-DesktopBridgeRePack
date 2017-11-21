@@ -14,6 +14,8 @@ Takes an Appx or Bundle file, repackages and signs it using the Store test certi
 3. Recreates the Appx file with the modified AppxManifest.xml
 4. Signs the Appx file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
+> The signed Appx file name will be 'InitialFileNameStoreSigned.appx' 
+
 ## Actions for BUNDLE
 1. Creates a new unique folder for extracting the Bundle files
 2. Modifies the 'CN' in the extracted AppxMetadata\AppxBundleManifest.xml
@@ -21,9 +23,7 @@ Takes an Appx or Bundle file, repackages and signs it using the Store test certi
 4. Recreates the Bundle file with the modified AppxMetadata\AppxBundleManifest.xml and modified packages
 5. Signs the Appx/Bundle file with the AppxTestRootAgency provided by the Store team ([direct link for downloading the certificate](https://go.microsoft.com/fwlink/?linkid=849018))
 
-> The signed Appx/Bundle file name will be 'InitialFileNameStoreSigned.appx' 
-> or
-> 'InitialFileNameStoreSigned.appxbundle' 
+> The signed Bundle file name will be 'InitialFileNameStoreSigned.appxbundle' 
   
 # RepackageAPPXFolderForWin10S (supports BUNDLE)
 Takes an Appx/Bundle folder, repackages and sign it using the Store test certificate
