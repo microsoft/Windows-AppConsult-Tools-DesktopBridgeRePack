@@ -9,6 +9,6 @@ Usage and details are available in the [**RepackageForWindows10S**](RepackageFor
 > The direct link for downloading the AppxTestRootAgency Store certificate is https://go.microsoft.com/fwlink/?linkid=849018
 
 ## RepackageAPPXFolderForWin10S.cmd tool
-The cmd takes a folder path as paramater. The folder path is the extracted content for an APPX. This tool is useful if you need to modify manually some files like the manifest or assets. The purpose is to repackage the folder into an APPX and sign using the Store AppxTestRootAgency certificate.
+The cmd takes a folder path as paramater. The folder path is the extracted content for an Appx/Bundle. This tool is useful if you need to modify manually some files like the manifest or assets. The purpose is to repackage the folder into an Appx/Bundle and sign it using the Store AppxTestRootAgency certificate.
 
 Usage and details are available in the [**RepackageForWindows10S**](RepackageForWindows10S) folder of this repo
