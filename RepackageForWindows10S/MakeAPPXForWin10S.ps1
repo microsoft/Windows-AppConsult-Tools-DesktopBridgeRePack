@@ -185,6 +185,8 @@ function Work($AppxOrBundleFile, $InsideAppx) {
 
     # Ends AppInsights telemetry
     $client.Flush()
+
+    # ApplicationInsights documentation - https://docs.microsoft.com/en-us/azure/application-insights/application-insights-custom-operations-tracking
 }
 # =============================================================================
 
