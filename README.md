@@ -2,7 +2,7 @@
 Create and test your Desktop Bridge Apps Easely 
 
 ## MakeAPPXForWin10S.cmd tool
-The cmd just take an Appx filename as parameter. It "repackages" and signs it with the Store AppxTestRootAgency certificate provided in the [documentation](https://docs.microsoft.com/en-us/windows/uwp/porting/desktop-to-uwp-test-windows-s)
+The cmd just take an Appx/Bundle filename as parameter. It "repackages" and signs it with the Store AppxTestRootAgency certificate provided in the [documentation](https://docs.microsoft.com/en-us/windows/uwp/porting/desktop-to-uwp-test-windows-s)
 
 Usage and details are available in the [**RepackageForWindows10S**](RepackageForWindows10S) folder of this repo
 
