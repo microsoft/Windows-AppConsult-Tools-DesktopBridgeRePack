@@ -101,7 +101,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
 
     if($FileExtension -eq '.APPX') {
         # APPX
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /l /p $AppxOrBundleFile /d $UnzippedFolder /o
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unpack /p $AppxOrBundleFile /d $UnzippedFolder /o
     }
     else {
         #BUNDLE
@@ -151,7 +151,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
         else {
             $ModifiedAppxBundleFile = $AppxPathOnly + "\" + $AppxOrBundleFilenameWithoutExtension + "StoreSigned.appx"
         }
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder -o
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' pack -p $ModifiedAppxBundleFile -d $UnzippedFolder -l -o
     }
     else {
         # BUNDLE
