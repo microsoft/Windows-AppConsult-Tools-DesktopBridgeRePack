@@ -93,7 +93,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
     if ($AppxPathOnly -eq "") # AppxOrBundleFile is located in the current directory
     {
         # AppxPathOnly = current path
-        $AppxPathOnly=Split-Path $PSScriptPath 
+        $AppxPathOnly=Split-Path $PSScriptPath
     }
     # Does not use an unique folder name. Reusing the same folder in order to allow manual modifications
     #$CurrentDateTime = Get-Date -UFormat "%Y-%m-%d-%Hh-%Mm-%Ss"
