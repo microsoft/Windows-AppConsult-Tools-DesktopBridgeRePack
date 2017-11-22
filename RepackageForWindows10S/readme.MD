@@ -26,7 +26,7 @@ Takes an Appx or Bundle file, repackages and signs it using the Store test certi
 > The signed Bundle file name will be 'InitialFileNameStoreSigned.appxbundle' 
   
 # RepackageAPPXFolderForWin10S (supports BUNDLE)
-Takes an Appx/Bundle folder, repackages and sign it using the Store test certificate
+Takes an Appx/Bundle folder *created by MakeAPPXForWin10S.cmd* (because we need to have already the the 'CN' modification done), repackages and sign it using the Store test certificate
 ## Usage
 ### For Appx
 `RepackageAPPXFolderForWin10S.cmd "C:\Temp\MyDesktopBridgeFolder"`
