@@ -42,9 +42,12 @@ function ModifyManifestFile ($ManifestFile) {
     }
     catch {
         Write-Host "[Error] Not able to open '$ManifestFile'" -ForegroundColor Red
-        $telemetryException = New-Object "Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry"  
-        $telemetryException.Exception = $_.Exception  
-        $client.TrackException($telemetryException)  
+        if ($IsTelemetryActive) 
+        {
+            $telemetryException = New-Object "Microsoft.ApplicationInsights.DataContracts.ExceptionTelemetry"  
+            $telemetryException.Exception = $_.Exception  
+            $client.TrackException($telemetryException)  
+        }
         exit
     }
 
@@ -184,7 +187,11 @@ function Work($AppxOrBundleFile, $InsideAppx) {
     # Porting and testing your classic desktop applications on Windows 10 S with the Desktop Bridge - https://blogs.msdn.microsoft.com/appconsult/2017/06/15/porting-and-testing-your-classic-desktop-applications-on-windows-10-s-with-the-desktop-bridge/
 
     # Ends AppInsights telemetry
-    $client.Flush()
+    if ($IsTelemetryActive) 
+    {
+        $client.Flush()
+    }
+    
 
     # ApplicationInsights documentation - https://docs.microsoft.com/en-us/azure/application-insights/application-insights-custom-operations-tracking
 }
@@ -195,10 +202,18 @@ function Work($AppxOrBundleFile, $InsideAppx) {
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
 
 # AppInsights telemetry initialization
-Add-Type -Path ".\DllsLocalCopies\Microsoft.ApplicationInsights.dll"  
-$client = New-Object Microsoft.ApplicationInsights.TelemetryClient  
-$client.InstrumentationKey="22708eb2-9a6b-4b7f-a0a2-e67b7b5c0b03"
-$client.TrackPageView("MakeAPPXForWin10S") 
+$IsTelemetryActive = $true
+try 
+{
+    Add-Type -Path ".\DllsLocalCopies\Microsoft.ApplicationInsights.dll"  
+    $client = New-Object Microsoft.ApplicationInsights.TelemetryClient  
+    $client.InstrumentationKey="22708eb2-9a6b-4b7f-a0a2-e67b7b5c0b03"
+    $client.TrackPageView("MakeAPPXForWin10S") 
+}
+catch {
+    $IsTelemetryActive = $false
+}
+
 
 if ($AppxOrBundleFile -eq '') {
     Write-Host "[Error] A .APPX or .APPXBUNDLE file was not specified." -ForegroundColor Red

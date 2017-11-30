@@ -75,7 +75,10 @@ function Repack($Folder, $Bundle) {
     # Porting and testing your classic desktop applications on Windows 10 S with the Desktop Bridge - https://blogs.msdn.microsoft.com/appconsult/2017/06/15/porting-and-testing-your-classic-desktop-applications-on-windows-10-s-with-the-desktop-bridge/
 
     # Ends AppInsights telemetry
-    $client.Flush()
+    if ($IsTelemetryActive) 
+    {
+        $client.Flush()
+    }
 }
 # =============================================================================
 
@@ -88,10 +91,18 @@ function Repack($Folder, $Bundle) {
 [System.Threading.Thread]::CurrentThread.CurrentCulture = [System.Globalization.CultureInfo]::CreateSpecificCulture("en-US") 
 
 # AppInsights telemetry initialization
-Add-Type -Path ".\DllsLocalCopies\Microsoft.ApplicationInsights.dll"  
-$client = New-Object Microsoft.ApplicationInsights.TelemetryClient  
-$client.InstrumentationKey="22708eb2-9a6b-4b7f-a0a2-e67b7b5c0b03"
-$client.TrackPageView("RepackageAPPXFolderForWin10S") 
+$IsTelemetryActive = $true
+try 
+{
+    Add-Type -Path ".\DllsLocalCopies\Microsoft.ApplicationInsights.dll"  
+    $client = New-Object Microsoft.ApplicationInsights.TelemetryClient  
+    $client.InstrumentationKey="22708eb2-9a6b-4b7f-a0a2-e67b7b5cb03"
+    $client.TrackPageView("RepackageAPPXFolderForWin10S") 
+}
+catch {
+    $IsTelemetryActive = $false
+}
+
 
 $AppxFolderExists = Test-Path $AppxFolder
 if ($AppxFolderExists -eq $false)
