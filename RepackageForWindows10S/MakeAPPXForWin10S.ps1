@@ -111,7 +111,7 @@ function Work($AppxOrBundleFile, $InsideAppx) {
     }
     else {
         #BUNDLE
-        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unbundle /p $AppxOrBundleFile /d $UnzippedFolder /l /o
+        & 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe' unbundle /p $AppxOrBundleFile /d $UnzippedFolder /o
     }
     Write-Host "Done" -ForegroundColor Yellow
     # =============================================================================
