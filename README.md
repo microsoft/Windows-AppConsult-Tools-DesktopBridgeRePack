@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # DesktopBridgeTools
 
 Create and test your Desktop Bridge Apps Easely
@@ -21,7 +20,7 @@ Usage and details are available in the [**RepackageForWindows10S**](RepackageFor
 
 
 > The script uses Application Insights for strictly anonymous usage reports. There is no personal data collected. You are free to comment in scripts the lines using '$client' to remove any Application Insights usage.
-=======
+
 
 # Contributing
 
@@ -36,4 +35,3 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
->>>>>>> 77c5f31d50d1da4f5e2b19ca101c089884598b30
