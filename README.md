@@ -1,6 +1,6 @@
-# DesktopBridgeTools
+# DesktopBridgeRepack
 
-Create and test your Desktop Bridge Apps Easely
+Unpack, Repack and test your Desktop Bridge Apps Easely
 
 ## MakeAPPXForWin10S.cmd tool
 
